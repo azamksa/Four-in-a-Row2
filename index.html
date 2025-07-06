@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -585,7 +586,21 @@
                 padding: 6px;
             }
         }
+        @media (max-width: 320px) {
+            .cell {
+                width: 40px;
+                height: 40px;
+            }
 
+            .board {
+                max-width: 310px;
+                gap: 2px;
+            }
+
+            .game-container {
+                padding: 6px;
+            }
+        }
         /* إخفاء hover effects على الجوال */
         @media (hover: none) {
             /* .cell:hover {
@@ -600,7 +615,7 @@
 <body>
     <div class="main-container">
         <div class="game-container">
-            <div class="top-controls">
+            <header class="top-controls" style="margin-bottom: 12px;">
                 <div class="game-mode-dropdown">
                     <button class="control-btn" onclick="toggleModeDropdown()" id="gameModeBtn">
                         🎮 <span id="currentModeText">وضع اللعب</span>
@@ -721,7 +736,7 @@
                 <div class="status-indicator" id="statusIndicator"></div>
             </div>
 
-            <div class="game-info">
+            <div class="game-info" style="margin-top: 10px; flex-direction: column;">
                 <div class="current-player">
                     <div class="player-indicator" id="playerIndicator"></div>
                     <span id="currentPlayerText">الأحمر</span>
@@ -1162,25 +1177,25 @@
                     isAIMode = true;
                     humanPlayer = 'red';
                     aiPlayer = 'yellow';
-                    showTimer();
+                    if (mode === "ai") { showTimer(); } else { hideTimer(); }
                     break;
                 case 'local':
                     isAIMode = false;
-                    showTimer();
+                    if (mode === "ai") { showTimer(); } else { hideTimer(); }
                     break;
                 case 'room':
                     isAIMode = false;
                     document.getElementById('roomInterface').classList.remove('hidden');
                     updateConnectionStatus();
                     initSocket();
-                    showTimer();
+                    if (mode === "ai") { showTimer(); } else { hideTimer(); }
                     break;
                 case 'online':
                     isAIMode = false;
                     document.getElementById('onlineInterface').classList.remove('hidden');
                     updateConnectionStatus();
                     initSocket();
-                    showTimer();
+                    if (mode === "ai") { showTimer(); } else { hideTimer(); }
                     break;
             }
 
@@ -1538,9 +1553,9 @@
 
         function resetGame() {
             // منع إعادة اللعبة في الوضع الأونلاين
-            if (gameMode === 'room' || gameMode === 'online') {
-                showMessage('لا يمكن إعادة اللعبة في الوضع الأونلاين');
-                return;
+            // السماح بإعادة اللعبة في جميع الأوضاع
+            if (gameOver) {
+                showMessage("تمت إعادة اللعبة");
             }
 
             stopTimer();
